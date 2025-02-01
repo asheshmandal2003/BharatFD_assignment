@@ -4,6 +4,18 @@ from django.core.cache import cache
 from .models import FAQ
 from rest_framework.pagination import PageNumberPagination
 from django.shortcuts import render
+import json
+
+
+def get_faqs_from_cache(lang):
+    cached_faqs = cache.get(f'faqs_{lang}')
+    if cached_faqs:
+        return json.loads(cached_faqs)
+    return None
+
+
+def set_faqs_to_cache(lang, faqs_data):
+    cache.set(f'faqs_{lang}', json.dumps(faqs_data), timeout=3600*24)
 
 
 class FAQSerializer(serializers.ModelSerializer):
@@ -25,7 +37,7 @@ class FAQViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         lang = request.GET.get('lang', 'en')
-        cached_faqs = cache.get(f'faqs_{lang}')
+        cached_faqs = get_faqs_from_cache(lang)
 
         if cached_faqs:
             faqs_data = cached_faqs
@@ -53,13 +65,25 @@ class FAQViewSet(viewsets.ModelViewSet):
                 }
                 for faq in faqs
             ]
-            cache.set(f'faqs_{lang}', faqs_data, timeout=180)
+            set_faqs_to_cache(lang, faqs_data)
 
         page = self.paginate_queryset(faqs_data)
         if page is not None:
             return self.get_paginated_response(page)
 
         return Response(faqs_data)
+
+    def invalidate_cache(self):
+        for lang in ['en', 'hi', 'bn']:
+            cache.delete(f'faqs_{lang}')
+
+    def perform_update(self, serializer):
+        self.invalidate_cache()
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        self.invalidate_cache()
+        instance.delete()
 
 
 def faq_page(request):
