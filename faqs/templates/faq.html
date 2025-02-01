@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FAQs</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background: #121212;
+        color: #fff;
+      }
+      h2 {
+        color: #ff9800;
+      }
+      .faq-container {
+        margin: auto;
+      }
+      .faq-item {
+        background: #333;
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+      }
+      select {
+        width: 150px;
+        padding: 10px;
+        margin: 10px 0;
+        border: none;
+        border-radius: 5px;
+      }
+      button {
+        padding: 10px;
+        background: #ff9800;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+      }
+      .faq-item-question {
+        color: #ff9800;
+        display: block;
+      }
+
+      .faq-item-answer {
+        display: block;
+        margin-bottom: 15px;
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="faq-container">
+      <h2>Frequently Asked Questions</h2>
+      <label for="lang">Select Language:</label>
+      <select id="lang">
+        <option value="en">English</option>
+        <option value="hi">Hindi</option>
+        <option value="bn">Bengali</option>
+      </select>
+      <button onclick="fetchFAQs()">Search</button>
+      <div id="faq-list"></div>
+    </div>
+
+    <script>
+      function fetchFAQs() {
+        const lang = document.getElementById("lang").value;
+        fetch(`/api/v1/faqs/?lang=${lang}`)
+          .then((response) => response.json())
+          .then((data) => {
+            const faqList = document.getElementById("faq-list");
+            faqList.innerHTML = "";
+            if (data.count === 0) {
+              faqList.innerHTML = "<p>No FAQs available.</p>";
+              return;
+            }
+
+            data.results.forEach((faq) => {
+              faqList.innerHTML += `<div class="faq-item">
+    <strong class="faq-item-question">Q: ${faq.question}</strong><br>
+    <strong class="faq-item-answer">Answer:</strong> ${faq.answer}
+</div>
+`;
+            });
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+      fetchFAQs();
+    </script>
+  </body>
+</html>

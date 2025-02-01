@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from django.core.cache import cache
 from .models import FAQ
 from rest_framework.pagination import PageNumberPagination
+from django.shortcuts import render
 
 
 class FAQSerializer(serializers.ModelSerializer):
@@ -59,3 +60,7 @@ class FAQViewSet(viewsets.ModelViewSet):
             return self.get_paginated_response(page)
 
         return Response(faqs_data)
+
+
+def faq_page(request):
+    return render(request, "faq.html")
