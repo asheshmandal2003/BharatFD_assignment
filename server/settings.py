@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,6 +44,14 @@ INSTALLED_APPS = [
     'faqs',
     'ckeditor',
 ]
+
+JAZZMIN_UI_TWEAKS = {
+    "theme": "darkly",
+    "dark_mode_theme": "darkly", 
+    "navbar": "navbar-dark bg-dark",
+    "sidebar": "sidebar-dark-primary",
+}
+
 
 CKEDITOR_CONFIGS = {
     'default': {
