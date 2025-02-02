@@ -92,7 +92,7 @@ Once the containers are running, you can access the Django application at:
 To create a superuser for the Django admin interface, run the following command:
 
   ```bash
-  docker-compose exec server python manage.py createsuperuser
+  docker compose exec server python manage.py createsuperuser
   ```
 
 Follow the prompts to enter a username, email, and password.
