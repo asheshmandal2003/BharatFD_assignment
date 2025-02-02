@@ -12,6 +12,7 @@ It uses PostgreSQL for database management and Redis for caching frequently acce
 ### 2. Admin Interface:
 
 ![Screenshot from 2025-02-02 05-31-23](https://github.com/user-attachments/assets/759de2be-e7ed-482a-a577-63bc4fea3906)
+![Screenshot from 2025-02-02 05-51-52](https://github.com/user-attachments/assets/298333af-0e16-4250-a669-2abf97b7f795)
 
 
 ## Features
